@@ -8,11 +8,7 @@
 #ifndef _FC_TASKPLANNER_h
 #define _FC_TASKPLANNER_h
 
-#if defined(ARDUINO) && ARDUINO >= 100
-	#include "arduino.h"
-#else
-	#include "WProgram.h"
-#endif
+#include "arduino.h"
 
 
 class FC_TaskPlanner
@@ -21,9 +17,10 @@ class FC_TaskPlanner
 	typedef void (*functionPointer)();
 	
  public:
-	FC_TaskPlanner(uint8_t plannedTasksMaxArrSize = 5); // max amt of planned tasks at one time
+	FC_TaskPlanner(uint8_t plannedTasksMaxArrSize = 5); // max amt of planned tasks at one time (default is 5)
 	~FC_TaskPlanner();
-	bool scheduleTask(functionPointer fPtr, uint16_t call_in); // callIn - in how many milliseconds call a scheduled task; return true if added successfully
+	bool scheduleTask(functionPointer fPtr, uint32_t call_in); // callIn - in how many milliseconds call a scheduled task; return true if added successfully
+	bool scheduleTaskMicroseconds(functionPointer fPtr, uint32_t call_in); // same as above but time is in microseconds
 	void runPlanner(); // execute this function in the main loop()
 	
  private:
@@ -40,6 +37,8 @@ class FC_TaskPlanner
 	};
 	plannedTaskType* plannedTasksArr; // array where stored are functions until they are called
 	uint8_t tasksInArray = 0; // amt of tasks in the array above
+
+	uint32_t tNow; // last runPlanner execution time
 };
 
 

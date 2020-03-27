@@ -23,25 +23,32 @@ FC_TaskPlanner::~FC_TaskPlanner()
 }
 
 
-bool FC_TaskPlanner::scheduleTask(functionPointer fPtr, uint16_t call_in)
+bool FC_TaskPlanner::scheduleTask(functionPointer fPtr, uint32_t call_in)
 {
-	if (tasksInArray < MaxPlannedTasks)
-	{
-		plannedTasksArr[tasksInArray].functionPtr = fPtr;
-		plannedTasksArr[tasksInArray].timeToExecute = millis() + call_in;
-		tasksInArray++;
-		return true;
-	}
-	
-	return false;
+	return scheduleTaskMicroseconds(fPtr, call_in * 1000);
+}
+
+
+bool FC_TaskPlanner::scheduleTaskMicroseconds(functionPointer fPtr, uint32_t call_in)
+{
+	// Check if array is not full
+	if (tasksInArray >= MaxPlannedTasks)
+		return false;
+
+	plannedTasksArr[tasksInArray].functionPtr = fPtr;
+	plannedTasksArr[tasksInArray].timeToExecute = micros() + call_in;
+	tasksInArray++;
+
+	return true;
 }
 
 
 void FC_TaskPlanner::runPlanner()
 {
+	tNow = micros();
+
 	for (uint8_t i=0; i<tasksInArray; i++)
 	{
-		uint32_t tNow = millis();
 		if (tNow >= plannedTasksArr[i].timeToExecute)
 		{
 			// Execute the task
@@ -57,7 +64,7 @@ void FC_TaskPlanner::runPlanner()
 bool FC_TaskPlanner::removeTaskFromArray(uint8_t taskPos)
 {
 	// If try to remove not existing task
-	if (taskPos >=tasksInArray)
+	if (taskPos >= tasksInArray)
 		return false;
 	
 	// Remove the potential free space between removed task and end of the array

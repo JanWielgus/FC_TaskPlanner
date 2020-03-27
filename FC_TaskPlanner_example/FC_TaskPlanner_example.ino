@@ -18,7 +18,9 @@ void setup()
 	Serial.begin(115200);
 	Serial.println("Program has been started!");
 	
-	taskPlanner.scheduleTask(plannedTask1, 2000); // call task1 in 2000ms (once)
+	// call task1 in 2000ms (once)
+	// There is also another method scheduleTaskMicroseconds() with the same params but time to execute in microseconds
+	taskPlanner.scheduleTask(plannedTask1, 2000);
 	Serial.println("Task1 has been planned to execute in 2 seconds");
 }
 
