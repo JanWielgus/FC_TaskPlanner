@@ -22,6 +22,8 @@ class FC_TaskPlanner
 	bool scheduleTask(functionPointer fPtr, uint32_t call_in); // callIn - in how many milliseconds call a scheduled task; return true if added successfully
 	bool scheduleTaskMicroseconds(functionPointer fPtr, uint32_t call_in); // same as above but time is in microseconds
 	void runPlanner(); // execute this function in the main loop()
+	uint8_t getAmtOfAwaitingTasks();
+	uint32_t getCurrentTime(); // in microseconds
 	
  private:
 	bool removeTaskFromArray(uint8_t taskPos); // used after function execution, remove empty space from the array (0 is the first task)

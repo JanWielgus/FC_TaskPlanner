@@ -61,6 +61,18 @@ void FC_TaskPlanner::runPlanner()
 }
 
 
+uint8_t FC_TaskPlanner::getAmtOfAwaitingTasks()
+{
+	return tasksInArray;
+}
+
+
+uint32_t FC_TaskPlanner::getCurrentTime()
+{
+	return tNow;
+}
+
+
 bool FC_TaskPlanner::removeTaskFromArray(uint8_t taskPos)
 {
 	// If try to remove not existing task
